@@ -1,5 +1,6 @@
 extends Node
 
+const ChemistryUtils = preload("res://scripts/ChemistryUtils.gd")
 var reactions: Dictionary = {}
 
 func _ready():
@@ -51,30 +52,12 @@ func load_reactions_from_csv(path: String) -> Dictionary:
 			if col_reagent == "":
 				continue
 
-			var parsed = parse_cell(cell)
+			var parsed = ChemistryUtils.parse_reaction_cell(cell)
 
 			result[row_reagent + "|" + col_reagent] = parsed
 			result[col_reagent + "|" + row_reagent] = parsed
 
 	return result
-
-func parse_cell(cell: String) -> Dictionary:
-	if cell.begins_with("p:"):
-		return {
-			"type": "positive",
-			"result": cell.substr(2).strip_edges()
-		}
-
-	if cell.begins_with("b:"):
-		return {
-			"type": "bonus",
-			"result": cell.substr(2).strip_edges()
-		}
-
-	return {
-		"type": "neutral",
-		"result": ""
-	}
 
 func check_reaction(a: String, b: String) -> Dictionary:
 	return reactions.get(a + "|" + b, {

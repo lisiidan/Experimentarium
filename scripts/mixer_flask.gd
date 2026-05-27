@@ -135,6 +135,15 @@ func get_stored_products(products: Array[String]) -> Array[String]:
 
 	return stored
 
+func _process_discovered_products(products: Array[String]) -> void:
+	for product in products:
+		if reagent_shelf.reagent_already_spawned(product):
+			continue
+		if reagent_shelf.is_basic_reagent(get_full_name(product)):
+			continue
+
+		animate_result_to_shelf(product)
+
 func set_bubbles_color(color: Color):
 	bubbles.modulate = color
 
@@ -224,7 +233,7 @@ func resolve_reaction():
 	match reaction["type"]:
 		"positive":
 			var products = split_products(reaction["result"])
-			pending_shelf_reagents = products.duplicate()
+			pending_shelf_reagents = []
 
 			var active_product = get_active_product(products)
 			var stored_products = get_stored_products(products)
@@ -240,6 +249,9 @@ func resolve_reaction():
 			for product in products:
 				if not reagent_shelf.reagent_already_spawned(product):
 					discovered_any = true
+
+			if discovered_any:
+				_process_discovered_products(products)
 
 			if products.size() > 1:
 				show_feedback(
@@ -407,6 +419,7 @@ func animate_result_to_shelf(reagent: String):
 		sprite.queue_free()
 		reagent_shelf.add_reagent_to_shelf(reagent)
 		JournalManager.unlock_entry(reagent)
+		goal_board.check_goal(reagent)
 		show_feedback("New journal entry unlocked: " + reagent, Color(0.344, 0.169, 0.078, 1.0))
 	)
 

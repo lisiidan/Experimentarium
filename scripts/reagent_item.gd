@@ -1,5 +1,7 @@
 extends Area2D
 
+const ChemistryUtils = preload("res://scripts/ChemistryUtils.gd")
+
 static var currently_dragged: Area2D = null
 
 var reagent_id: String = ""
@@ -9,35 +11,6 @@ var drag_offset := Vector2.ZERO
 var start_position := Vector2.ZERO
 var original_z := 0
 var original_scale := Vector2.ONE
-
-var map = {
-	"hydrogen": "H2",
-	"oxygen": "O2",
-	"nitrogen": "N2",
-	"chlorine": "Cl2",
-	"carbon": "C",
-	"sodium": "Na",
-	"sulfur": "S",
-	"calcium": "Ca",
-
-	"water": "H2O",
-	"sodium_hydroxide": "NaOH",
-	"hydrochloric_acid": "HCl",
-	#"sodium_chloride": "NaCl",
-	"carbon_dioxide": "CO2",
-	"sulfur_dioxide": "SO2",
-	"carbonic_acid": "H2CO3",
-	"sulfurous_acid": "H2SO3",
-	"calcium_hydroxide": "Ca(OH)2",
-	"calcium_oxide": "CaO",
-	"sodium_sulfite": "NaSO3",
-	"ammonia": "NH3",
-	"nitric_oxide": "NO",
-	"hydrogen_sulfide": "H2S",
-	"sodium_oxide": "Na2O",
-	"nitrogen_dioxide": "NO2",
-	"nitric_acid": "HNO3"
-}
 
 var reagent_descriptions = {
 	"H2": "Hydrogen\nAtomic number: 1\nMolar mass: 2.02 g/mol\nState: Gas",
@@ -135,11 +108,7 @@ func reset_position():
 	global_position = start_position
 
 func setup(sprite_name: String):
-	reagent_id = get_formula(sprite_name)
+	reagent_id = ChemistryUtils.get_formula(sprite_name)
 	reagent_description = reagent_descriptions.get(reagent_id, reagent_id)
 	$Label.text = reagent_id
 	$TextureRect.texture = load("res://assets/sprites/reagentsSprites/" + sprite_name + ".png")
-
-func get_formula(name: String) -> String:
-	name = name.to_lower()
-	return map.get(name, name)

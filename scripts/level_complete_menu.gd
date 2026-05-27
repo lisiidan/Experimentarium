@@ -22,34 +22,22 @@ func _ready():
 	menu_button.pressed.connect(func(): menu_pressed.emit())
 
 func show_for_level_complete(level_index: int):
-	background.texture = texture_win
-	title_label.text = "Experiment Complete"
-
-	next_button.visible = true
-	retry_button.visible = true
-	menu_button.visible = true
-
-	show()
-	get_tree().paused = true
+	_show_menu(texture_win, "Experiment Complete", true, true, true)
 
 func show_for_level_failed(level_index: int):
-	background.texture = texture_fail
-	title_label.text = "Experiment Failed"
-
-	next_button.visible = false
-	retry_button.visible = true
-	menu_button.visible = true
-
-	show()
-	get_tree().paused = true
+	_show_menu(texture_fail, "Experiment Failed", false, true, true)
 
 func show_for_game_complete():
-	#background.texture = texture_game_complete
-	title_label.text = "All Experiments Complete"
+	_show_menu(null, "All Experiments Complete", false, false, true)
 
-	next_button.visible = false
-	retry_button.visible = false
-	menu_button.visible = true
+func _show_menu(texture: Texture, title: String, next_visible: bool, retry_visible: bool, menu_visible: bool) -> void:
+	if texture != null:
+		background.texture = texture
+
+	title_label.text = title
+	next_button.visible = next_visible
+	retry_button.visible = retry_visible
+	menu_button.visible = menu_visible
 
 	show()
 	get_tree().paused = true

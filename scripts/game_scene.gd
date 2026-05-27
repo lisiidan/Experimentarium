@@ -1,5 +1,7 @@
 extends Node2D
 
+const ChemistryUtils = preload("res://scripts/ChemistryUtils.gd")
+
 @onready var goal_board: Node2D = $GoalBoard
 @onready var reagent_shelf: Node2D = $ReagentShelf
 @onready var level_complete_menu: Control = $UI/LevelCompleteMenu
@@ -18,7 +20,7 @@ func unlock_starting_reagents_for_journal():
 		return
 
 	for reagent_name in current_level.reagents:
-		var reagent_id = get_formula(reagent_name)
+		var reagent_id = ChemistryUtils.get_formula(reagent_name)
 		JournalManager.unlock_entry(reagent_id)
 
 func _input(event):
@@ -122,56 +124,3 @@ func return_to_main_menu():
 
 func show_game_finished_menu():
 	level_complete_menu.show_for_game_complete()
-
-func parse_cell(cell: String) -> Dictionary:
-	cell = cell.strip_edges()
-
-	if cell == "-":
-		return {"type":"neutral","result":""}
-
-	if cell.begins_with("p:"):
-		return {
-			"type":"positive",
-			"result":cell.substr(2)
-		}
-
-	if cell.begins_with("b:"):
-		return {
-			"type":"bonus",
-			"result":cell.substr(2)
-		}
-
-	return {"type":"neutral","result":""}
-
-var map = {
-	"hydrogen": "H2",
-	"oxygen": "O2",
-	"nitrogen": "N2",
-	"chlorine": "Cl2",
-	"carbon": "C",
-	"sodium": "Na",
-	"sulfur": "S",
-	"calcium": "Ca",
-
-	"water": "H2O",
-	"sodium_hydroxide": "NaOH",
-	"hydrochloric_acid": "HCl",
-	#"sodium_chloride": "NaCl",
-	"carbon_dioxide": "CO2",
-	"sulfur_dioxide": "SO2",
-	"carbonic_acid": "H2CO3",
-	"sulfurous_acid": "H2SO3",
-	"calcium_hydroxide": "Ca(OH)2",
-	"calcium_oxide": "CaO",
-	"sodium_sulfite": "NaSO3",
-	"ammonia": "NH3",
-	"nitric_oxide": "NO",
-	"hydrogen_sulfide": "H2S",
-	"sodium_oxide": "Na2O",
-	"nitrogen_dioxide": "NO2",
-	"nitric_acid": "HNO3"
-}
-
-func get_formula(name: String) -> String:
-	name = name.to_lower()
-	return map.get(name, name)
