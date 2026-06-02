@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjuduo12raoq2"]
+[gd_scene load_steps=5 format=3 uid="uid://bjuduo12raoq2"]
 
 [ext_resource type="Script" uid="uid://bsv3o63viglql" path="res://scripts/reagent_item.gd" id="1_ytrfq"]
 [ext_resource type="Texture2D" uid="uid://ckfjxlfkkfll6" path="res://assets/sprites/reagentsSprites/hydrogen.png" id="2_666p1"]
+[ext_resource type="FontFile" uid="uid://d08x682pryvc6" path="res://assets/fonts/ByteBounce.ttf" id="2_eus3j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ytrfq"]
 size = Vector2(94, 88)
@@ -14,6 +15,8 @@ offset_left = 27.0
 offset_top = 87.0
 offset_right = 67.0
 offset_bottom = 110.0
+theme_override_fonts/font = ExtResource("2_eus3j")
+theme_override_font_sizes/font_size = 48
 text = "TEXT"
 horizontal_alignment = 1
 

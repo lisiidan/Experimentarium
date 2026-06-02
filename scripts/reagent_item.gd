@@ -111,4 +111,5 @@ func setup(sprite_name: String):
 	reagent_id = ChemistryUtils.get_formula(sprite_name)
 	reagent_description = reagent_descriptions.get(reagent_id, reagent_id)
 	$Label.text = reagent_id
+	$Label.add_theme_color_override("font_color", ChemistryUtils.get_reagent_color(reagent_id))
 	$TextureRect.texture = load("res://assets/sprites/reagentsSprites/" + sprite_name + ".png")
