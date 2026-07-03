@@ -284,7 +284,7 @@ func resolve_reaction():
 			play_bubbles()
 			flash_liquid(mix_color)
 			set_liquid_level(2)
-			show_feedback("No observable reaction, clear the flask", Color(0.9, 0.9, 0.9))
+			show_feedback("No observable reaction, click to clear the flask", Color(0.9, 0.9, 0.9))
 			# neutral stays locked until clear_flask()
 
 func flash_liquid(color: Color):

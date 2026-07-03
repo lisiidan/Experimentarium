@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func play_sleep() -> void:
 	is_busy = false
-	animated_sprite.play("sleep")
+	animated_sprite.play("new_sleep")
 
 func react_to_reagent(reagent_id: String) -> void:
 	if is_busy:
@@ -24,7 +24,7 @@ func react_to_reagent(reagent_id: String) -> void:
 
 func play_happy() -> void:
 	is_busy = true
-	animated_sprite.play("happy")
+	animated_sprite.play("new_happy")
 	await animated_sprite.animation_finished
 	play_sleep()
 
@@ -42,7 +42,7 @@ func play_angry() -> void:
 	tween.tween_property(self, "position", original_pos + Vector2(4,0), 0.05)
 	tween.tween_property(self, "position", original_pos, 0.05)
 
-	animated_sprite.play("angry")
+	animated_sprite.play("new_angry")
 
 	await animated_sprite.animation_finished
 
@@ -51,7 +51,7 @@ func play_angry() -> void:
 
 func play_scared() -> void:
 	is_busy = true
-	animated_sprite.play("scared")
+	animated_sprite.play("new_scared")
 	await animated_sprite.animation_finished
 	#play_sleep()
 
@@ -61,4 +61,4 @@ func contains_point(point: Vector2) -> bool:
 func reset_cat() -> void:
 	is_busy = false
 	animated_sprite.modulate = Color.WHITE
-	animated_sprite.play("sleep")
+	animated_sprite.play("new_sleep")

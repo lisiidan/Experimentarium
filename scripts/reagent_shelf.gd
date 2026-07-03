@@ -54,23 +54,25 @@ func spawn_reagents(reagents: Array):
 		add_reagent_to_shelf(r)
 
 func reagent_already_spawned(reagent_name: String) -> bool:
-	return spawned_reagents.has(reagent_name)
+	return spawned_reagents.has(get_id(reagent_name))
 
 func is_basic_reagent(reagent_name: String) -> bool:
 	return basic_reagents.has(reagent_name)
 
 func add_reagent_to_shelf(reagent_name: String):
-	if reagent_already_spawned(reagent_name):
+	var id = get_id(reagent_name)
+
+	if reagent_already_spawned(id):
 		return
 
 	if spawned_reagents.size() >= MAX_REAGENTS:
 		return
 	
 	var i = spawned_reagents.size()
-	spawned_reagents.append(reagent_name)
+	spawned_reagents.append(id)
 
 	var item = reagent_scene.instantiate()
-	item.setup(get_full_name(reagent_name))
+	item.setup(get_full_name(id))
 
 	var row = i / PER_ROW
 	var col = i % PER_ROW
@@ -96,3 +98,9 @@ func get_next_slot_global_position() -> Vector2:
 	)
 
 	return to_global(local_pos)
+
+func get_id(name: String) -> String:
+	for key in reverse_map.keys():
+		if reverse_map[key] == name:
+			return key
+	return name
