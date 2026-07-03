@@ -5,7 +5,7 @@ extends Node2D
 const PER_ROW := 6
 const MAX_REAGENTS := 24
 const CELL_W := 130
-const CELL_H := 155
+const CELL_H := 145
 
 var reverse_map = {
 	"H2": "hydrogen",
