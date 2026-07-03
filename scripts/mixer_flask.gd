@@ -450,6 +450,7 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 	if event is InputEventMouseButton \
 	and event.button_index == MOUSE_BUTTON_LEFT \
 	and event.pressed:
+		AudioManager.play_click()
 		clear_flask()
 
 func shake_flask():

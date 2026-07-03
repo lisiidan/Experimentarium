@@ -12,15 +12,19 @@ func _ready() -> void:
 	back_button.pressed.connect(_on_back_pressed)
 
 func _on_level_1_pressed() -> void:
+	AudioManager.play_click()
 	_open_level(0)
 
 func _on_level_2_pressed() -> void:
+	AudioManager.play_click()
 	_open_level(1)
 
 func _on_level_3_pressed() -> void:
+	AudioManager.play_click()
 	_open_level(2)
 
 func _on_back_pressed() -> void:
+	AudioManager.play_click()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _open_level(index: int) -> void:

@@ -10,12 +10,30 @@ var default_entries: Array[String] = [
 ]
 
 func _ready():
-	reset_to_default()
+	SaveManager.load_game()
+
+	if SaveManager.unlocked_journal.is_empty():
+		reset_to_default()
+	else:
+		unlocked_entries.clear()
+
+		for entry in SaveManager.unlocked_journal:
+			unlocked_entries.append(entry)
 
 func reset_to_default():
-	unlocked_entries = default_entries.duplicate()
+	unlocked_entries.clear()
 
-func unlock_entry(entry_id: String):
+	for entry in default_entries:
+		unlocked_entries.append(entry)
+
+	SaveManager.unlocked_journal.clear()
+
+	for entry in unlocked_entries:
+		SaveManager.unlocked_journal.append(entry)
+
+	SaveManager.save_game()
+
+func unlock_entry(entry_id: String) -> bool:
 	if entry_id == "":
 		return false
 
@@ -23,6 +41,14 @@ func unlock_entry(entry_id: String):
 		return false
 
 	unlocked_entries.append(entry_id)
+
+	SaveManager.unlocked_journal.clear()
+
+	for entry in unlocked_entries:
+		SaveManager.unlocked_journal.append(entry)
+
+	SaveManager.save_game()
+
 	entry_unlocked.emit(entry_id)
 	return true
 

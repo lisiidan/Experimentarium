@@ -25,6 +25,7 @@ func react_to_reagent(reagent_id: String) -> void:
 func play_happy() -> void:
 	is_busy = true
 	animated_sprite.play("new_happy")
+	AudioManager.play_happy_cat()
 	await animated_sprite.animation_finished
 	play_sleep()
 
@@ -43,7 +44,7 @@ func play_angry() -> void:
 	tween.tween_property(self, "position", original_pos, 0.05)
 
 	animated_sprite.play("new_angry")
-
+	AudioManager.play_angry_cat()
 	await animated_sprite.animation_finished
 
 	animated_sprite.modulate = Color.WHITE
@@ -52,6 +53,7 @@ func play_angry() -> void:
 func play_scared() -> void:
 	is_busy = true
 	animated_sprite.play("new_scared")
+	AudioManager.play_scared_cat()
 	await animated_sprite.animation_finished
 	#play_sleep()
 

@@ -11,11 +11,14 @@ func _ready() -> void:
 
 func _on_play_pressed() -> void:
 	GameState.selected_level_index = 0
+	AudioManager.play_click()
 	get_tree().change_scene_to_file("res://scenes/level_menu.tscn")
 
 func _on_sandbox_pressed() -> void:
 	GameState.selected_level_index = 9
+	AudioManager.play_click()
 	get_tree().change_scene_to_file("res://scenes/game_scene.tscn")
 
 func _on_quit_pressed() -> void:
+	AudioManager.play_click()
 	get_tree().quit()

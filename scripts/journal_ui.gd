@@ -10,7 +10,7 @@ var bold_journal_font = preload("res://assets/fonts/ByteBounce.ttf")
 @onready var entries_list: GridContainer = $NotebookPanel/EntriesList
 @onready var title_label: Label = $NotebookPanel/EntryPage/Title
 @onready var body_label: RichTextLabel = $NotebookPanel/EntryPage/Body
-
+@onready var reset_progress_button: Button = $ResetProgressButton
 var notebook
 var entry_map := {}
 var current_entry_id := ""
@@ -23,6 +23,7 @@ func _ready():
 	for entry in entries:
 		if entry != null and entry.reagent_id != "":
 			entry_map[entry.reagent_id] = entry
+	reset_progress_button.pressed.connect(_on_reset_progress_pressed)
 
 func open_journal():
 	show()
@@ -124,3 +125,9 @@ func update_entry_button_styles():
 		else:
 			button.add_theme_color_override("font_color", Color(0.23, 0.18, 0.12))
 			button.modulate = Color(1, 1, 1, 1)
+
+func _on_reset_progress_pressed() -> void:
+	AudioManager.play_click()
+	SaveManager.reset_save()
+	JournalManager.reset_to_default()
+	refresh_entries()

@@ -41,14 +41,17 @@ func _ready():
 	load_level(level_index)
 
 func _on_next_pressed():
+	AudioManager.play_click()
 	level_complete_menu.close_menu()
 	go_to_next_level()
 
 func _on_retry_pressed():
+	AudioManager.play_click()
 	level_complete_menu.close_menu()
 	restart_level()
 
 func _on_menu_pressed():
+	AudioManager.play_click()
 	level_complete_menu.close_menu()
 	return_to_main_menu()
 
