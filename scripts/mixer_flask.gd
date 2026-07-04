@@ -132,7 +132,6 @@ func trigger_explosion():
 	last_reaction_type = "explosion"
 
 	contents.clear()
-	#contents.append("BOOM")
 	update_ui()
 
 	set_liquid_level(2)
@@ -158,17 +157,14 @@ func play_explosion_flash_sequence() -> void:
 		screen_flash.color = Color.WHITE
 		screen_flash.modulate.a = 0.0
 
-	# резкая вспышка
 	var flash_in = create_tween()
 	flash_in.tween_property(screen_flash, "modulate:a", 1.0, 0.06)
 	await flash_in.finished
 
-	# маленький hit stop
 	get_tree().paused = true
 	await get_tree().create_timer(0.06, true, false, true).timeout
 	get_tree().paused = false
 
-	# скрываем колбу, показываем осколки
 	flask_visual.visible = false
 	liquid_half.visible = false
 	liquid_full.visible = false
@@ -177,7 +173,6 @@ func play_explosion_flash_sequence() -> void:
 		explosion_shards.visible = true
 		explosion_shards.modulate = Color.WHITE
 
-	# плавное прояснение
 	var flash_out = create_tween()
 	flash_out.tween_property(screen_flash, "modulate:a", 0.0, 0.45)
 	await flash_out.finished
@@ -285,7 +280,6 @@ func resolve_reaction():
 			flash_liquid(mix_color)
 			set_liquid_level(2)
 			show_feedback("No observable reaction, click to clear the flask", Color(0.9, 0.9, 0.9))
-			# neutral stays locked until clear_flask()
 
 func flash_liquid(color: Color):
 	var original_modulate = liquid_half.modulate

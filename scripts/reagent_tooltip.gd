@@ -52,7 +52,6 @@ func _show_now() -> void:
 	var estimated_width = _estimate_text_width(pending_text)
 	var text_width = clampf(estimated_width, MIN_TEXT_WIDTH, MAX_TEXT_WIDTH)
 
-	# сначала временно показываем, но невидимо, чтобы layout пересчитался корректно
 	modulate.a = 0.0
 	show()
 
