@@ -79,12 +79,14 @@ The game was developed using:
 
 - **Godot Engine**
 - **GDScript**
+- **Aseprite**
+- **Audacity**
 
 ---
 
 ## Repository Purpose
 
-This repository was published for **hackathon evaluation and portfolio purposes**.
+This repository was published for **Bachelor's thesis and portfolio purposes**.
 
 ---
 
