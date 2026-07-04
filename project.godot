@@ -20,6 +20,9 @@ config/icon="res://assets/sprites/icon.svg"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 JournalManager="*res://scripts/journal_manager.gd"
 GameState="*res://scripts/GameState.gd"
+SaveManager="*res://scripts/SaveManager.gd"
+MusicManager="*res://music_manager.gd"
+AudioManager="*res://scripts/audio_manager.gd"
 
 [display]
 

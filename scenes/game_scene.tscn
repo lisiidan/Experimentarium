@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cqhgggoc6cthm" path="res://scripts/game_scene.gd" id="1_mixcd"]
 [ext_resource type="Script" uid="uid://k13rfv5ilnri" path="res://scripts/ReactionSystem.gd" id="2_kk2rg"]
+[ext_resource type="Texture2D" uid="uid://cj1jdsm8lj2dd" path="res://assets/sprites/final_bg.png" id="3_8k5xn"]
 [ext_resource type="Script" uid="uid://cfqfkj0gr7us7" path="res://scripts/reagent_shelf.gd" id="3_mj2jn"]
 [ext_resource type="Texture2D" uid="uid://cur5o1xjngjfw" path="res://assets/sprites/MixingKolbaPlaceholder.png" id="3_v1wow"]
-[ext_resource type="Texture2D" uid="uid://vwqxvcmuwkgc" path="res://assets/sprites/new_background.png" id="3_y1k1x"]
 [ext_resource type="PackedScene" uid="uid://bjuduo12raoq2" path="res://scenes/reagent_item.tscn" id="4_kdryc"]
 [ext_resource type="Script" uid="uid://cbjygos1gwhuo" path="res://scripts/mixer_flask.gd" id="5_kdryc"]
 [ext_resource type="FontFile" uid="uid://dpuydgwylexvh" path="res://assets/fonts/EraserRegular.ttf" id="9_mw25s"]
@@ -95,10 +95,10 @@ script = ExtResource("2_kk2rg")
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(960, 540)
 scale = Vector2(3.9999998, 4)
-texture = ExtResource("3_y1k1x")
+texture = ExtResource("3_8k5xn")
 
 [node name="ReagentShelf" type="Node2D" parent="."]
-position = Vector2(1059, 103)
+position = Vector2(1067, 98)
 script = ExtResource("3_mj2jn")
 reagent_scene = ExtResource("4_kdryc")
 

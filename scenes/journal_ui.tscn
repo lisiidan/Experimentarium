@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://0nkptr6f5f4n"]
+[gd_scene load_steps=4 format=3 uid="uid://0nkptr6f5f4n"]
 
 [ext_resource type="Script" uid="uid://ovc576a8ao2m" path="res://scripts/journal_ui.gd" id="1_8qnux"]
 [ext_resource type="Texture2D" uid="uid://e0eil4pbemko" path="res://assets/sprites/notebook_maxi.png" id="2_8qnux"]
+[ext_resource type="FontFile" uid="uid://d08x682pryvc6" path="res://assets/fonts/ByteBounce.ttf" id="3_grmvl"]
 
 [node name="JournalUI" type="Control"]
 layout_mode = 3
@@ -66,3 +67,14 @@ offset_top = 25.428574
 offset_right = 178.57141
 offset_bottom = 237.99998
 bbcode_enabled = true
+
+[node name="ResetProgressButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 875.0
+offset_right = 486.0
+offset_bottom = 920.0
+theme_override_colors/font_color = Color(0.22670713, 0.22670767, 0.22670725, 1)
+theme_override_fonts/font = ExtResource("3_grmvl")
+theme_override_font_sizes/font_size = 48
+text = "Reset Progress"

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://hdwc8c5uus34"]
+
+[ext_resource type="AudioStream" uid="uid://coj1ksbn6wk5b" path="res://assets/background_music.ogg" id="1_hetdf"]
+[ext_resource type="Script" uid="uid://btpvl68o3bs62" path="res://music_manager.gd" id="1_tn5dr"]
+
+[node name="MusicManager" type="AudioStreamPlayer"]
+stream = ExtResource("1_hetdf")
+autoplay = true
+parameters/looping = true
+script = ExtResource("1_tn5dr")
