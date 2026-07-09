@@ -334,28 +334,20 @@ func reset_flask():
 func clear_flask():
 	if last_reaction_type == "explosion":
 		return
-
-	for reagent in pending_shelf_reagents:
-		goal_board.check_goal(reagent)
-
-		if not reagent_shelf.reagent_already_spawned(reagent) and not reagent_shelf.is_basic_reagent(get_full_name(reagent)):
-			animate_result_to_shelf(reagent)
-
-	pending_shelf_reagents.clear()
-
+	
 	contents.clear()
 	locked = false
 	last_reaction_type = "neutral"
-
+	
 	flask_visual.modulate = Color.WHITE
 	hide_liquids()
-
+	
 	if bubbles:
 		bubbles.emitting = false
-
+	
 	if feedback_label:
 		feedback_label.visible = false
-
+	
 	update_ui()
 
 func animate_result_to_shelf(reagent: String):
