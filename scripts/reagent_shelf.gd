@@ -37,11 +37,18 @@ var reverse_map = {
 }
 
 var spawned_reagents: Array[String] = []
+
 var basic_reagents: Array[String] = [
-	"hydrogen", "oxygen", "nitrogen", 
-	"chlorine", "carbon", "sodium", 
-	"sulfur", "calcium"
+	"hydrogen",
+	"oxygen",
+	"nitrogen",
+	"chlorine",
+	"carbon",
+	"sodium",
+	"sulfur",
+	"calcium"
 ]
+
 
 func clear_shelf():
 	spawned_reagents.clear()
@@ -49,15 +56,48 @@ func clear_shelf():
 	for child in get_children():
 		child.queue_free()
 
+
 func spawn_reagents(reagents: Array):
-	for r in reagents:
-		add_reagent_to_shelf(r)
+	for reagent in reagents:
+		add_reagent_to_shelf(reagent)
 
-func reagent_already_spawned(reagent_name: String) -> bool:
-	return spawned_reagents.has(get_id(reagent_name))
 
-func is_basic_reagent(reagent_name: String) -> bool:
-	return basic_reagents.has(reagent_name)
+func animate_result_to_shelf(reagent: String, start_position: Vector2):
+	var id = get_id(reagent)
+
+	var texture_path = "res://assets/sprites/reagentsSprites/" + get_full_name(id) + ".png"
+	var texture = load(texture_path)
+
+	if texture == null:
+		add_reagent_to_shelf(id)
+		GameEvents.reagent_discovered.emit(id)
+		return
+
+	var sprite := Sprite2D.new()
+	sprite.texture = texture
+	sprite.global_position = start_position
+	sprite.scale = Vector2(6, 6)
+	sprite.centered = true
+
+	get_tree().current_scene.add_child(sprite)
+
+	var target_pos = get_next_slot_global_position()
+
+	var tween = create_tween()
+
+	tween.tween_property(
+		sprite,
+		"global_position",
+		target_pos,
+		0.6
+	)
+
+	tween.tween_callback(func():
+		sprite.queue_free()
+		add_reagent_to_shelf(id)
+		GameEvents.reagent_discovered.emit(id)
+	)
+
 
 func add_reagent_to_shelf(reagent_name: String):
 	var id = get_id(reagent_name)
@@ -67,30 +107,53 @@ func add_reagent_to_shelf(reagent_name: String):
 
 	if spawned_reagents.size() >= MAX_REAGENTS:
 		return
-	
-	var i = spawned_reagents.size()
+
+	var index = spawned_reagents.size()
+
 	spawned_reagents.append(id)
 
 	var item = reagent_scene.instantiate()
 	item.setup(get_full_name(id))
 
-	var row = i / PER_ROW
-	var col = i % PER_ROW
-	item.position = Vector2(col * CELL_W, row * CELL_H)
+	var row = index / PER_ROW
+	var col = index % PER_ROW
+
+	item.position = Vector2(
+		col * CELL_W,
+		row * CELL_H
+	)
 
 	add_child(item)
+
+
+func reagent_already_spawned(reagent_name: String) -> bool:
+	return spawned_reagents.has(get_id(reagent_name))
+
+
+func is_basic_reagent(reagent_name: String) -> bool:
+	return basic_reagents.has(reagent_name)
+
 
 func get_full_name(name: String) -> String:
 	return reverse_map.get(name, name)
 
-func get_next_slot_global_position() -> Vector2:
-	var i = spawned_reagents.size()
 
-	if i >= MAX_REAGENTS:
+func get_id(name: String) -> String:
+	for key in reverse_map.keys():
+		if reverse_map[key] == name:
+			return key
+
+	return name
+
+
+func get_next_slot_global_position() -> Vector2:
+	var index = spawned_reagents.size()
+
+	if index >= MAX_REAGENTS:
 		return global_position
 
-	var row = i / PER_ROW
-	var col = i % PER_ROW
+	var row = index / PER_ROW
+	var col = index % PER_ROW
 
 	var local_pos = Vector2(
 		col * CELL_W + CELL_W * 0.5,
@@ -98,9 +161,3 @@ func get_next_slot_global_position() -> Vector2:
 	)
 
 	return to_global(local_pos)
-
-func get_id(name: String) -> String:
-	for key in reverse_map.keys():
-		if reverse_map[key] == name:
-			return key
-	return name

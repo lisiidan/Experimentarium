@@ -33,7 +33,7 @@ func _ready():
 
 	goal_board.all_goals_completed.connect(_on_all_goals_completed)
 	GameEvents.level_failed.connect(_on_level_failed)
-
+	GameEvents.reaction_resolved.connect(_on_reaction_resolved)
 	level_complete_menu.next_pressed.connect(_on_next_pressed)
 	level_complete_menu.retry_pressed.connect(_on_retry_pressed)
 	level_complete_menu.menu_pressed.connect(_on_menu_pressed)
@@ -131,3 +131,25 @@ func return_to_main_menu():
 
 func show_game_finished_menu():
 	level_complete_menu.show_for_game_complete()
+
+func _on_reaction_resolved(
+		reaction_type: String,
+		products: Array,
+		_discovered_any: bool,
+		_is_explosion: bool
+	) -> void:
+	
+	if reaction_type != "positive" and reaction_type != "bonus":
+		return
+
+	for product in products:
+		if reagent_shelf.reagent_already_spawned(product):
+			continue
+
+		if reagent_shelf.is_basic_reagent(reagent_shelf.get_full_name(product)):
+			continue
+
+		reagent_shelf.animate_result_to_shelf(
+			product,
+			mixer_flask.global_position
+		)

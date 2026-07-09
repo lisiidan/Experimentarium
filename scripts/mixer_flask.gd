@@ -2,7 +2,6 @@ extends Area2D
 
 @onready var contents_label = $ContentsLabel
 @onready var reaction_system: Node2D = $ReactionSystem
-@onready var reagent_shelf: Node2D = $"../ReagentShelf"
 @onready var pour_sound: AudioStreamPlayer2D = $PourSound
 
 @onready var flask_visual = $FlaskSprite
@@ -15,7 +14,6 @@ extends Area2D
 @onready var explosion_shards: Sprite2D = $ExplosionShards
 @onready var screen_flash: ColorRect = $"../UI/ScreenFlash"
 
-var pending_shelf_reagents: Array[String] = []
 var last_reaction_type: String = "neutral"
 
 var contents: Array[String] = []
@@ -105,15 +103,6 @@ func get_stored_products(products: Array[String]) -> Array[String]:
 
 	return stored
 
-func _process_discovered_products(products: Array[String]) -> void:
-	for product in products:
-		if reagent_shelf.reagent_already_spawned(product):
-			continue
-		if reagent_shelf.is_basic_reagent(get_full_name(product)):
-			continue
-
-		animate_result_to_shelf(product)
-
 func set_bubbles_color(color: Color):
 	bubbles.modulate = color
 
@@ -127,7 +116,6 @@ func is_explosive_pair(a: String, b: String) -> bool:
 
 func trigger_explosion():
 	locked = true
-	pending_shelf_reagents.clear()
 	last_reaction_type = "explosion"
 
 	contents.clear()
@@ -139,7 +127,12 @@ func trigger_explosion():
 	play_bubbles()
 	show_feedback("Explosion! The experiment failed.", Color.WHITE)
 
-	GameEvents.reaction_resolved.emit("explosion", "", false, true)
+	GameEvents.reaction_resolved.emit(
+		"explosion",
+		[],
+		false,
+		true
+	)
 	GameEvents.level_failed.emit()
 
 	shake_big()
@@ -191,95 +184,100 @@ func resolve_reaction():
 	last_reaction_type = reaction["type"]
 
 	match reaction["type"]:
+
 		"positive":
 			var products = split_products(reaction["result"])
-			pending_shelf_reagents = []
 
 			var active_product = get_active_product(products)
 			var stored_products = get_stored_products(products)
 			var result_color = get_reagent_color(active_product)
 
 			contents = [active_product]
+
 			show_single_reagent(active_product, true)
 			set_bubbles_color(result_color)
 			play_bubbles()
 			flash_liquid(result_color)
 
-			var discovered_any := false
-			for product in products:
-				if not reagent_shelf.reagent_already_spawned(product):
-					discovered_any = true
-
-			if discovered_any:
-				_process_discovered_products(products)
-
-			GameEvents.reaction_resolved.emit("positive", active_product, discovered_any, false)
+			GameEvents.reaction_resolved.emit(
+				"positive",
+				products,
+				true,
+				false
+			)
 
 			if products.size() > 1:
 				show_feedback(
-					"Flask keeps " + active_product + " | Stored: " + ", ".join(stored_products),
-					Color(0.344, 0.169, 0.078, 1.0)
-				)
-			elif discovered_any:
-				show_feedback(
-					"New reagent discovered: " + active_product,
-					Color(0.344, 0.169, 0.078, 1.0)
+					"Flask keeps " + active_product +
+					" | Stored: " + ", ".join(stored_products)
 				)
 			else:
-				show_feedback("Already known reagent(s)", Color(1.0, 1.0, 0.0, 1.0))
+				show_feedback(
+					"New reagent discovered: " + active_product
+				)
 
 			locked = false
+
 
 		"bonus":
 			var products = split_products(reaction["result"])
-			pending_shelf_reagents = []
 
 			var active_product = get_active_product(products)
 			var stored_products = get_stored_products(products)
 			var result_color = get_reagent_color(active_product)
 
 			contents = [active_product]
+
 			show_single_reagent(active_product, true)
 			set_bubbles_color(result_color)
 			play_bubbles()
 			flash_liquid(result_color)
 
-			var unlocked_any := false
-			for product in products:
-				if not reagent_shelf.reagent_already_spawned(product):
-					GameEvents.reagent_discovered.emit(product)
-					unlocked_any = true
-
-			GameEvents.reaction_resolved.emit("bonus", active_product, unlocked_any, false)
+			GameEvents.reaction_resolved.emit(
+				"bonus",
+				products,
+				true,
+				false
+			)
 
 			if products.size() > 1:
 				show_feedback(
-					"Journal updated. Flask keeps " + active_product + " | Stored: " + ", ".join(stored_products),
-					Color(0.6, 0.8, 1.0)
-				)
-			elif unlocked_any:
-				show_feedback(
-					"New journal entry discovered: " + active_product,
-					Color(0.6, 0.8, 1.0)
+					"Journal updated. Flask keeps " +
+					active_product +
+					" | Stored: " +
+					", ".join(stored_products)
 				)
 			else:
 				show_feedback(
-					"Reaction already is in journal",
-					Color(0.6, 0.8, 1.0)
+					"New journal entry discovered: " +
+					active_product
 				)
 
 			locked = false
 
+
 		"neutral":
-			var mix_color = mix_colors(get_reagent_color(a), get_reagent_color(b))
-			pending_shelf_reagents.clear()
+			var mix_color = mix_colors(
+				get_reagent_color(a),
+				get_reagent_color(b)
+			)
+
 			set_liquid_color(mix_color)
 			set_bubbles_color(mix_color)
 			play_bubbles()
 			flash_liquid(mix_color)
 			set_liquid_level(2)
-			GameEvents.reaction_resolved.emit("neutral", "", false, false)
-			show_feedback("No observable reaction, click to clear the flask", Color(0.9, 0.9, 0.9))
+
+			GameEvents.reaction_resolved.emit(
+				"neutral",
+				[],
+				false,
+				false
+			)
+
+			show_feedback(
+				"No observable reaction, click to clear the flask"
+			)
 
 func flash_liquid(color: Color):
 	var original_modulate = liquid_half.modulate
@@ -305,7 +303,6 @@ func flash_explosion():
 	)
 
 func reset_flask():
-	pending_shelf_reagents.clear()
 	contents.clear()
 	locked = false
 	last_reaction_type = "neutral"
@@ -349,34 +346,6 @@ func clear_flask():
 	
 	update_ui()
 
-func animate_result_to_shelf(reagent: String):
-	var texture_path = "res://assets/sprites/reagentsSprites/" + get_full_name(reagent) + ".png"
-	var texture = load(texture_path)
-
-	if texture == null:
-		reagent_shelf.add_reagent_to_shelf(reagent)
-		GameEvents.reagent_discovered.emit(reagent)
-		show_feedback("New journal entry unlocked: " + reagent, Color(0.344, 0.169, 0.078, 1.0))
-		return
-
-	var sprite := Sprite2D.new()
-	sprite.texture = texture
-	sprite.global_position = global_position
-	sprite.scale = Vector2(6, 6)
-	sprite.centered = true
-
-	get_tree().current_scene.add_child(sprite)
-
-	var target_pos = reagent_shelf.get_next_slot_global_position()
-
-	var tween = create_tween()
-	tween.tween_property(sprite, "global_position", target_pos, 0.6)
-
-	tween.tween_callback(func():
-		sprite.queue_free()
-		reagent_shelf.add_reagent_to_shelf(reagent)
-		GameEvents.reagent_discovered.emit(reagent)
-	)
 func update_ui():
 	contents_label.text = "\n".join(contents)
 

@@ -10,7 +10,7 @@ func _ready() -> void:
 	GameEvents.reaction_resolved.connect(_on_reaction_resolved)
 	play_sleep()
 
-func _on_reaction_resolved(reaction_type: String, result: String, discovered: bool, failed: bool) -> void:
+func _on_reaction_resolved(reaction_type: String, result: Array, discovered: bool, failed: bool) -> void:
 	if failed:
 		play_scared()
 	elif reaction_type == "positive" or reaction_type == "bonus":
