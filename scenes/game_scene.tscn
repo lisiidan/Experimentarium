@@ -89,9 +89,6 @@ size = Vector2(40, 47)
 [node name="GameScene" type="Node2D"]
 script = ExtResource("1_mixcd")
 
-[node name="ReactionSystem" type="Node2D" parent="."]
-script = ExtResource("2_kk2rg")
-
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(960, 540)
 scale = Vector2(3.9999998, 4)
@@ -126,6 +123,17 @@ position = Vector2(3, 144)
 position = Vector2(709, 808.00006)
 scale = Vector2(1.5, 1.5)
 script = ExtResource("5_kdryc")
+
+[node name="ReactionSystem" type="Node2D" parent="MixerFlask"]
+position = Vector2(-472.6667, -538.66675)
+scale = Vector2(0.6666667, 0.6666667)
+script = ExtResource("2_kk2rg")
+
+[node name="PourSound" type="AudioStreamPlayer2D" parent="MixerFlask"]
+position = Vector2(-472.6667, -538.66675)
+scale = Vector2(0.6666667, 0.6666667)
+stream = ExtResource("61_8k5xn")
+volume_db = -6.0
 
 [node name="FlaskSprite" type="Sprite2D" parent="MixerFlask"]
 scale = Vector2(6, 6)
@@ -224,10 +232,6 @@ shape = SubResource("RectangleShape2D_liy57")
 [node name="Cat" parent="." instance=ExtResource("29_6irsn")]
 position = Vector2(1670, 769)
 scale = Vector2(7, 7)
-
-[node name="PourSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("61_8k5xn")
-volume_db = -6.0
 
 [connection signal="input_event" from="MixerFlask" to="MixerFlask" method="_on_input_event"]
 [connection signal="timeout" from="MixerFlask/FeedbackTimer" to="MixerFlask" method="_on_feedback_timer_timeout"]

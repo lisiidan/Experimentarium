@@ -1,10 +1,9 @@
 extends Area2D
 
 @onready var contents_label = $ContentsLabel
-@onready var reaction_system: Node2D = $"../ReactionSystem"
+@onready var reaction_system: Node2D = $ReactionSystem
 @onready var reagent_shelf: Node2D = $"../ReagentShelf"
-@onready var goal_board: Node2D = $"../GoalBoard"
-@onready var pour_sound: AudioStreamPlayer2D = $"../PourSound"
+@onready var pour_sound: AudioStreamPlayer2D = $PourSound
 
 @onready var flask_visual = $FlaskSprite
 @onready var liquid_half = $LiquidHalf
