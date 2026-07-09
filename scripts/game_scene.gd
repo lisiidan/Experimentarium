@@ -133,20 +133,24 @@ func show_game_finished_menu():
 	level_complete_menu.show_for_game_complete()
 
 func _on_reaction_resolved(
-		reaction_type: String,
-		products: Array,
-		_discovered_any: bool,
-		_is_explosion: bool
-	) -> void:
-	
-	if reaction_type != "positive" and reaction_type != "bonus":
+	reaction_type: String,
+	products: Array,
+	_discovered_any: bool,
+	_is_explosion: bool
+) -> void:
+	if reaction_type == "bonus":
+		for product in products:
+			GameEvents.reagent_discovered.emit(product)
+		return
+
+	if reaction_type != "positive":
 		return
 
 	for product in products:
 		if reagent_shelf.reagent_already_spawned(product):
 			continue
 
-		if reagent_shelf.is_basic_reagent(reagent_shelf.get_full_name(product)):
+		if ChemistryUtils.is_basic_reagent(product):
 			continue
 
 		reagent_shelf.animate_result_to_shelf(

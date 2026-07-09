@@ -19,38 +19,6 @@ var last_reaction_type: String = "neutral"
 var contents: Array[String] = []
 var locked := false
 
-var reverse_map = {
-	"H2": "hydrogen",
-	"O2": "oxygen",
-	"N2": "nitrogen",
-	"Cl2": "chlorine",
-	"C": "carbon",
-	"Na": "sodium",
-	"S": "sulfur",
-	"Ca": "calcium",
-
-	"H2O": "water",
-	"NaOH": "sodium_hydroxide",
-	"HCl": "hydrochloric_acid",
-	"NaCl": "sodium_chloride",
-	"CO2": "carbon_dioxide",
-	"SO2": "sulfur_dioxide",
-	"H2CO3": "carbonic_acid",
-	"H2SO3": "sulfurous_acid",
-	"Ca(OH)2": "calcium_hydroxide",
-	"CaO": "calcium_oxide",
-	"NaSO3": "sodium_sulfite",
-	"NH3": "ammonia",
-	"NO": "nitric_oxide",
-	"H2S": "hydrogen_sulfide",
-	"Na2O": "sodium_oxide",
-	"NO2": "nitrogen_dioxide",
-	"HNO3": "nitric_acid"
-}
-
-func get_full_name(name: String) -> String:
-	return reverse_map.get(name, name)
-
 func _ready():
 	add_to_group("mixer_flask")
 	hide_liquids()

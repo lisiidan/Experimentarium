@@ -14,6 +14,7 @@ static var reagent_map = {
 	"water": "H2O",
 	"sodium_hydroxide": "NaOH",
 	"hydrochloric_acid": "HCl",
+	"sodium_chloride": "NaCl",
 	"carbon_dioxide": "CO2",
 	"sulfur_dioxide": "SO2",
 	"carbonic_acid": "H2CO3",
@@ -58,19 +59,52 @@ static var reagent_data = {
 	"HNO3": {"color": Color(0.950, 0.850, 0.200, 1.0)}
 }
 
-static func get_formula(name: String) -> String:
-	return reagent_map.get(name.to_lower(), name)
 
-static func get_reagent_color(id: String) -> Color:
+static func get_formula(reagent_name: String) -> String:
+	var key := reagent_name.to_lower()
+	return reagent_map.get(key, reagent_name)
+
+
+static func get_reagent_name(formula: String) -> String:
+	for reagent_name in reagent_map.keys():
+		if reagent_map[reagent_name] == formula:
+			return reagent_name
+
+	return formula
+
+
+static func get_reagent_color(reagent: String) -> Color:
+	var id := get_formula(reagent)
+
 	if reagent_data.has(id):
 		return reagent_data[id]["color"]
+
 	return Color.WHITE
+
+
+static func is_basic_reagent(reagent: String) -> bool:
+	var id := get_formula(reagent)
+
+	return [
+		"H2",
+		"O2",
+		"N2",
+		"Cl2",
+		"C",
+		"Na",
+		"S",
+		"Ca"
+	].has(id)
+
 
 static func parse_reaction_cell(cell: String) -> Dictionary:
 	cell = cell.strip_edges()
 
 	if cell == "-":
-		return {"type":"neutral","result":""}
+		return {
+			"type": "neutral",
+			"result": ""
+		}
 
 	if cell.begins_with("p:"):
 		return {
@@ -84,4 +118,7 @@ static func parse_reaction_cell(cell: String) -> Dictionary:
 			"result": cell.substr(2).strip_edges()
 		}
 
-	return {"type":"neutral","result":""}
+	return {
+		"type": "neutral",
+		"result": ""
+	}
