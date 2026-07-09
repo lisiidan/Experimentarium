@@ -26,6 +26,12 @@ var current_goal_index := -1
 
 var goal_strike_lines: Array[ColorRect] = []
 
+func _ready() -> void:
+	GameEvents.reagent_discovered.connect(_on_reagent_discovered)
+
+func _on_reagent_discovered(reagent_id: String) -> void:
+	check_goal(reagent_id)
+
 func show_goal(text: String):
 	header_full_text = text
 	header_visible_chars = 0

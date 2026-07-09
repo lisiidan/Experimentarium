@@ -11,6 +11,7 @@ var default_entries: Array[String] = [
 
 func _ready():
 	SaveManager.load_game()
+	GameEvents.reagent_discovered.connect(_on_reagent_discovered)
 
 	if SaveManager.unlocked_journal.is_empty():
 		reset_to_default()
@@ -19,6 +20,9 @@ func _ready():
 
 		for entry in SaveManager.unlocked_journal:
 			unlocked_entries.append(entry)
+
+func _on_reagent_discovered(reagent_id: String) -> void:
+	unlock_entry(reagent_id)
 
 func reset_to_default():
 	unlocked_entries.clear()

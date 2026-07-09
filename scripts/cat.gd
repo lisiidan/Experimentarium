@@ -7,7 +7,16 @@ var is_busy := false
 
 func _ready() -> void:
 	add_to_group("cat")
+	GameEvents.reaction_resolved.connect(_on_reaction_resolved)
 	play_sleep()
+
+func _on_reaction_resolved(reaction_type: String, result: String, discovered: bool, failed: bool) -> void:
+	if failed:
+		play_scared()
+	elif reaction_type == "positive" or reaction_type == "bonus":
+		play_happy()
+	elif reaction_type == "neutral":
+		play_angry()
 
 func play_sleep() -> void:
 	is_busy = false

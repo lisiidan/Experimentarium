@@ -140,16 +140,11 @@ func trigger_explosion():
 	play_bubbles()
 	show_feedback("Explosion! The experiment failed.", Color.WHITE)
 
-	var cat = get_tree().get_first_node_in_group("cat")
-	if cat and cat.has_method("play_scared"):
-		cat.play_scared()
+	GameEvents.reaction_resolved.emit("explosion", "", false, true)
+	GameEvents.level_failed.emit()
 
 	shake_big()
 	await play_explosion_flash_sequence()
-
-	var game = get_tree().get_first_node_in_group("game_controller")
-	if game and game.has_method("fail_level"):
-		game.fail_level()
 
 func play_explosion_flash_sequence() -> void:
 	if screen_flash:
@@ -219,6 +214,8 @@ func resolve_reaction():
 			if discovered_any:
 				_process_discovered_products(products)
 
+			GameEvents.reaction_resolved.emit("positive", active_product, discovered_any, false)
+
 			if products.size() > 1:
 				show_feedback(
 					"Flask keeps " + active_product + " | Stored: " + ", ".join(stored_products),
@@ -250,8 +247,11 @@ func resolve_reaction():
 
 			var unlocked_any := false
 			for product in products:
-				if(JournalManager.unlock_entry(product)):
+				if not reagent_shelf.reagent_already_spawned(product):
+					GameEvents.reagent_discovered.emit(product)
 					unlocked_any = true
+
+			GameEvents.reaction_resolved.emit("bonus", active_product, unlocked_any, false)
 
 			if products.size() > 1:
 				show_feedback(
@@ -279,6 +279,7 @@ func resolve_reaction():
 			play_bubbles()
 			flash_liquid(mix_color)
 			set_liquid_level(2)
+			GameEvents.reaction_resolved.emit("neutral", "", false, false)
 			show_feedback("No observable reaction, click to clear the flask", Color(0.9, 0.9, 0.9))
 
 func flash_liquid(color: Color):
@@ -363,7 +364,7 @@ func animate_result_to_shelf(reagent: String):
 
 	if texture == null:
 		reagent_shelf.add_reagent_to_shelf(reagent)
-		JournalManager.unlock_entry(reagent)
+		GameEvents.reagent_discovered.emit(reagent)
 		show_feedback("New journal entry unlocked: " + reagent, Color(0.344, 0.169, 0.078, 1.0))
 		return
 
@@ -383,11 +384,8 @@ func animate_result_to_shelf(reagent: String):
 	tween.tween_callback(func():
 		sprite.queue_free()
 		reagent_shelf.add_reagent_to_shelf(reagent)
-		JournalManager.unlock_entry(reagent)
-		goal_board.check_goal(reagent)
-		show_feedback("New journal entry unlocked: " + reagent, Color(0.344, 0.169, 0.078, 1.0))
+		GameEvents.reagent_discovered.emit(reagent)
 	)
-
 func update_ui():
 	contents_label.text = "\n".join(contents)
 

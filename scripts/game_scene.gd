@@ -32,6 +32,7 @@ func _ready():
 	add_to_group("game_controller")
 
 	goal_board.all_goals_completed.connect(_on_all_goals_completed)
+	GameEvents.level_failed.connect(_on_level_failed)
 
 	level_complete_menu.next_pressed.connect(_on_next_pressed)
 	level_complete_menu.retry_pressed.connect(_on_retry_pressed)
@@ -54,6 +55,9 @@ func _on_menu_pressed():
 	AudioManager.play_click()
 	level_complete_menu.close_menu()
 	return_to_main_menu()
+
+func _on_level_failed() -> void:
+	fail_level()
 
 func load_level(index: int):
 	level_finished = false

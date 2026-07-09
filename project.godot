@@ -23,6 +23,7 @@ GameState="*res://scripts/GameState.gd"
 SaveManager="*res://scripts/SaveManager.gd"
 MusicManager="*res://music_manager.gd"
 AudioManager="*res://scripts/audio_manager.gd"
+GameEvents="*res://scripts/GameEvents.gd"
 
 [display]
 
